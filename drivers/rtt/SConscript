@@ -1,3 +1,4 @@
+import os
 Import('RTT_ROOT')
 Import('rtconfig')
 from building import *
@@ -115,17 +116,19 @@ if GetDepend(['BSP_USING_USBH']):
     src += ['drv_usbh.c']
 
 src += ['drv_common.c']
+src += ['drv_clk.c']
 
+cwd = GetCurrentDir()
 path =  [cwd]
-path += [cwd + '/config']
+path += [cwd + '/include']
+path += [cwd + '/include/config']
 
 if not GetDepend('PKG_CMSIS_CORE'):
-    path += [cwd + '/CMSIS/Include']
+    path += [cwd + '/include/CMSIS/Include']
 
 if GetDepend('BSP_USING_ON_CHIP_FLASH'):
-    path += [cwd + '/drv_flash']
+    path += [cwd + '/include/drv_flash']
 
-group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path)
 group = DefineGroup('', src, depend=[''], CPPPATH = path)
 
 def modify_board_h_file(filepath, include_str):
